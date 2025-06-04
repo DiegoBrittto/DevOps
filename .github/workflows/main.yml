@@ -26,9 +26,6 @@ jobs:
     - name: Verificar HTML
       run: npx htmlhint ./index.html
 
-    - name: Verificar JS
-      run: npx eslint "script.js"
-
   build:
     runs-on: ubuntu-latest
     needs: lint

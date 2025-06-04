@@ -1,5 +1,5 @@
 // ESLint v9+ configuration file
-export default [
+module.exports = [
   {
     files: ["**/*.{js,jsx,ts,tsx}"] ,
     languageOptions: {

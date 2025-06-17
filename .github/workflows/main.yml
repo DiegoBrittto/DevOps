@@ -32,13 +32,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      - name: Run a multi-line script
+      - name: Simular build (copiar arquivos)
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          mkdir dist
+          cp index.html style.css script.js dist/
+
   deploy-hmg:
     runs-on: ubuntu-latest
     environment:
@@ -46,15 +44,30 @@ jobs:
       url: 'https://diegobrittto.com'
     needs: build
     steps:
-      - name: Run a one-line script
-        run: echo Deploy, hmg!
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Instalar AWS CLI
+        run: sudo apt-get install -y awscli
+
+      - name: Configurar credenciais AWS
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Subir arquivos para o S3
+        run: |
+          mkdir dist
+          cp index.html style.css script.js dist/
+          aws s3 sync dist/ s3://${{ secrets.S3_BUCKET_NAME }}/ --delete
 
   deploy-drd:
     runs-on: ubuntu-latest
     environment:
       name: drd
-      url: 'https://diegobrittto.com'
-    needs: deploy-hmg
+    needs: build
     steps:
-      - name: Run a one-line script
-        run: echo Deploy, drd!
+      - name: Exemplo de Deploy DRD
+        run: echo Deploy ambiente DRD!

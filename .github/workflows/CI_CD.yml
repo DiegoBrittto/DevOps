@@ -48,25 +48,21 @@ jobs:
       - name: Checkout do código
         uses: actions/checkout@v4
 
-      - name: Instalar AWS CLI (script oficial)
-        run: |
-          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-          unzip awscliv2.zip
-          sudo ./aws/install --update
+      # Removido o passo de instalação da AWS CLI porque já vem instalada no ubuntu-latest
 
       - name: Configurar credenciais AWS
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-2 # << Região passada diretamente
+          aws-region: us-east-2   # Região configurada diretamente aqui
 
       - name: Subir arquivos para o S3
         run: |
           mkdir dist
           cp index.html style.css script.js dist/
           aws s3 sync dist/ s3://devops/
-          # Removido --delete para não excluir arquivos no bucket
+          # --delete removido para não excluir arquivos no bucket
 
   deploy-drd:
     runs-on: ubuntu-latest

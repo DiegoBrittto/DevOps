@@ -61,8 +61,7 @@ jobs:
         run: |
           mkdir dist
           cp index.html style.css script.js dist/
-          aws s3 sync dist/ s3://devops/
-          # --delete removido para não excluir arquivos no bucket
+          aws s3 sync dist/ s3://calculadora-devops/ --delete 
 
   deploy-drd:
     runs-on: ubuntu-latest

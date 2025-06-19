@@ -64,7 +64,7 @@ jobs:
         run: |
           mkdir dist
           cp index.html style.css script.js dist/
-          aws s3 sync dist/ s3://${{ secrets.S3_BUCKET_NAME }}/ --delete
+          aws s3 sync dist/ s3://devops/ --delete
 
   deploy-drd:
     runs-on: ubuntu-latest
